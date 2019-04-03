@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
-@EnableAuthorizationServer
 @SpringBootApplication
-@EnableResourceServer
 @RestController
+@EnableResourceServer
+@EnableAuthorizationServer
 public class Application {
-
     @RequestMapping(value = { "/user" }, produces = "application/json")
     public Map<String, Object> user(OAuth2Authentication user) {
         Map<String, Object> userInfo = new HashMap<>();
@@ -26,12 +25,10 @@ public class Application {
         return userInfo;
     }
 
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
+
 }
-
-
-
-
