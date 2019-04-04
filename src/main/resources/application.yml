@@ -18,6 +18,12 @@ eureka:
 server:
   contextPath:   /auth
 
+flyway:
+  enabled: true
+  url: jdbc:postgresql://localhost:5432/auth_service
+  user: postgres
+  password: root
+
 spring.jpa.database: "POSTGRESQL"
 spring.datasource.platform:  "postgres"
 spring.jpa.show-sql: "true"

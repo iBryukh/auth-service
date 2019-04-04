@@ -2,6 +2,7 @@ package com.smarthouse.authentication;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
@@ -16,7 +17,9 @@ import java.util.Map;
 @RestController
 @EnableResourceServer
 @EnableAuthorizationServer
+@EntityScan("com.smarthouse.commonutil.entities")
 public class Application {
+
     @RequestMapping(value = { "/user" }, produces = "application/json")
     public Map<String, Object> user(OAuth2Authentication user) {
         Map<String, Object> userInfo = new HashMap<>();
@@ -24,7 +27,6 @@ public class Application {
         userInfo.put("authorities", AuthorityUtils.authorityListToSet(user.getUserAuthentication().getAuthorities()));
         return userInfo;
     }
-
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
