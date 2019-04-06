@@ -2,7 +2,6 @@
 
 DROP TABLE IF EXISTS role CASCADE;
 DROP TABLE IF EXISTS customer CASCADE;
-DROP TABLE IF EXISTS customer_device CASCADE;
 
 CREATE TABLE IF NOT EXISTS role
 (
@@ -27,21 +26,10 @@ CREATE TABLE IF NOT EXISTS customer
     CONSTRAINT email_uq UNIQUE (email)
 );
 
-CREATE TABLE IF NOT EXISTS customer_device
-(
-    customer_id integer NOT NULL,
-    device_id   integer NOT NULL,
-    CONSTRAINT customer_device_fk FOREIGN KEY (customer_id) REFERENCES customer (id),
-    CONSTRAINT customer_device_pk PRIMARY KEY (customer_id, device_id)
-);
-
 ALTER TABLE role
     OWNER TO postgres;
 
 ALTER TABLE customer
-    OWNER TO postgres;
-
-ALTER TABLE customer_device
     OWNER TO postgres;
 
 -- GENERATE DATA
