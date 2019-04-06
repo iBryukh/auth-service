@@ -8,10 +8,10 @@ CREATE TABLE IF NOT EXISTS role
 (
     id           SERIAL       NOT NULL,
     name         VARCHAR(255) NOT NULL,
-    access_level INTEGER      NOT NULL
-        CONSTRAINT role_access_level_check
-            CHECK ((access_level <= 3) AND (access_level >= 0)),
-    PRIMARY KEY (id)
+    access_level INTEGER      NOT NULL,
+    CONSTRAINT role_access_level_check
+        CHECK ((access_level <= 3) AND (access_level >= 0)),
+    CONSTRAINT role_pk PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS customer
@@ -22,16 +22,17 @@ CREATE TABLE IF NOT EXISTS customer
     password     VARCHAR(255) NOT NULL,
     phone_number VARCHAR(255) NOT NULL,
     role_id      INT          NOT NULL,
-    FOREIGN KEY (role_id) REFERENCES role (id),
-    PRIMARY KEY (id)
+    CONSTRAINT customer_role_fk FOREIGN KEY (role_id) REFERENCES role (id),
+    CONSTRAINT customer_pk PRIMARY KEY (id),
+    CONSTRAINT email_uq UNIQUE (email)
 );
 
 CREATE TABLE IF NOT EXISTS customer_device
 (
     customer_id integer NOT NULL,
     device_id   integer NOT NULL,
-    FOREIGN KEY (customer_id) REFERENCES customer (id),
-    PRIMARY KEY (customer_id, device_id)
+    CONSTRAINT customer_device_fk FOREIGN KEY (customer_id) REFERENCES customer (id),
+    CONSTRAINT customer_device_pk PRIMARY KEY (customer_id, device_id)
 );
 
 ALTER TABLE role
@@ -60,7 +61,7 @@ DO $$
         WHILE freeLevel < levelsCount
             LOOP
                 INSERT INTO role (id, name, access_level)
-                VALUES (freeId, (select roleNames [ freeLevel + 1]), freeLevel);
+                VALUES (freeId, (select roleNames[freeLevel + 1]), freeLevel);
                 freeLevel = freeLevel + 1;
                 freeId = freeId + 1;
             END LOOP;
@@ -80,7 +81,7 @@ DO $$
         roleCount           INT          := 4;
         customersCount      INT          := 10;
         phoneLastNumber     INT;
-        roleNames   TEXT[] := '{"Admin", "Neighbour", "Observer", "Weak observer"}';
+        roleNames           TEXT[]       := '{"Admin", "Neighbour", "Observer", "Weak observer"}';
     BEGIN
 
         WHILE freeId < customersCount
@@ -89,7 +90,7 @@ DO $$
                 INSERT INTO customer (id, email, name, password, phone_number, role_id)
                 VALUES (freeId,
                         (SELECT FORMAT(templateEmail, freeId)),
-                        (SELECT FORMAT(templateName, (select roleNames [ currRoleId + 1]), freeId)),
+                        (SELECT FORMAT(templateName, (select roleNames[currRoleId + 1]), freeId)),
                         (SELECT FORMAT(templatePassword, freeId)),
                         (SELECT FORMAT(templatePhoneNumber, phoneLastNumber)),
                         currRoleId);
