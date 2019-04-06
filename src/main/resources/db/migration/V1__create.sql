@@ -73,13 +73,14 @@ DO $$
     DECLARE
         freeId              BIGINT       := 0;
         templateEmail       VARCHAR(255) := 'email%s@domain.com';
-        templateName        VARCHAR(255) := 'Test Name%s';
+        templateName        VARCHAR(255) := '%s%s';
         templatePassword    VARCHAR(255) := 'Test Password%s';
         templatePhoneNumber VARCHAR(255) := '+38011111111%s';
         currRoleId          INT          := 0;
         roleCount           INT          := 4;
         customersCount      INT          := 10;
         phoneLastNumber     INT;
+        roleNames   TEXT[] := '{"Admin", "Neighbour", "Observer", "Weak observer"}';
     BEGIN
 
         WHILE freeId < customersCount
@@ -88,7 +89,7 @@ DO $$
                 INSERT INTO customer (id, email, name, password, phone_number, role_id)
                 VALUES (freeId,
                         (SELECT FORMAT(templateEmail, freeId)),
-                        (SELECT FORMAT(templateName, freeId)),
+                        (SELECT FORMAT(templateName, (select roleNames [ currRoleId + 1]), freeId)),
                         (SELECT FORMAT(templatePassword, freeId)),
                         (SELECT FORMAT(templatePhoneNumber, phoneLastNumber)),
                         currRoleId);
