@@ -39,6 +39,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
+                .rolePrefix("ROLE_")
                 .dataSource(getDataSource())
                 .usersByUsernameQuery("select c.name, c.password, 1 from customer c where c.name = ?")
                 .authoritiesByUsernameQuery("select c.name, r.name from customer c inner join role r on c.role_id = r.id where c.name = ?");
