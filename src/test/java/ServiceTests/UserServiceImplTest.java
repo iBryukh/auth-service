@@ -1,6 +1,7 @@
-package com.smarthouse.authentication.service;
+package ServiceTests;
 
 import com.smarthouse.authentication.repository.UserRepository;
+import com.smarthouse.authentication.service.UserServiceImpl;
 import com.smarthouse.commonutil.entities.Role;
 import com.smarthouse.commonutil.entities.User;
 import junit.framework.TestCase;
