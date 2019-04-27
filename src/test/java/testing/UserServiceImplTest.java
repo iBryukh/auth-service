@@ -1,4 +1,4 @@
-package ServiceTests;
+package testing;
 
 import com.smarthouse.authentication.repository.UserRepository;
 import com.smarthouse.authentication.service.UserServiceImpl;
